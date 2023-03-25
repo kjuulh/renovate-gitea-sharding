@@ -1,0 +1,21 @@
+[package]
+name = "renovate-gitea-sharding"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+tokio.workspace = true
+eyre.workspace = true
+color-eyre.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
+dagger-sdk.workspace = true
+reqwest.workspace = true
+dotenv.workspace = true
+
+clap = "4.1.13"
+gritea = "0.1.8"
+tokio-scoped = "0.2.0"
+rand = "0.8.5"

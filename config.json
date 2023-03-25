@@ -1,0 +1,45 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "platform": "gitea",
+  "endpoint": "https://git.front.kjuulh.io/api/v1/",
+  "automerge": true,
+  "automergeType": "pr",
+  "extends": [
+    "config:base"
+  ],
+  "hostRules": [
+    {
+      "hostType": "docker",
+      "matchHost": "harbor.server.kjuulh.io",
+      "username": "admin",
+      "password": "{{ secrets.HARBOR_SERVER_PASSWORD }}"
+    }
+  ],
+  "packageRules": [
+    {
+      "matchDatasources": [
+        "docker"
+      ],
+      "registryUrls": [
+        "https://harbor.server.kjuulh.io/docker-proxy/library/"
+      ]
+    },
+    {
+      "groupName": "all dependencies",
+      "separateMajorMinor": false,
+      "groupSlug": "all",
+      "packageRules": [
+        {
+          "matchPackagePatterns": [
+            "*"
+          ],
+          "groupName": "all dependencies",
+          "groupSlug": "all"
+        }
+      ],
+      "lockFileMaintenance": {
+        "enabled": false
+      }
+    }
+  ]
+}
