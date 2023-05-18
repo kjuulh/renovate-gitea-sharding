@@ -1,15 +1,14 @@
 use std::fmt::Display;
 use std::sync::Arc;
-use std::time::Duration;
 
-use dagger_sdk::{HostDirectoryOpts, HostDirectoryOptsBuilder};
+use dagger_sdk::HostDirectoryOptsBuilder;
 use gritea::client::Gritea;
 use gritea::pagination::Pagination;
 use rand::seq::SliceRandom;
 use rand::thread_rng;
-use tokio::sync::{Mutex, Semaphore};
-use tokio::time::sleep;
-use tracing::{Level, Value};
+use tokio::sync::Mutex;
+
+use tracing::Level;
 
 #[tokio::main]
 async fn main() -> eyre::Result<()> {
@@ -33,7 +32,7 @@ async fn main() -> eyre::Result<()> {
 async fn run_renovate(repos: Repos) -> eyre::Result<()> {
     const MAX_ITEMS_AT_ONCE: usize = 3;
 
-    let (sender, mut r) = tokio::sync::mpsc::channel::<Repo>(MAX_ITEMS_AT_ONCE);
+    let (sender, r) = tokio::sync::mpsc::channel::<Repo>(MAX_ITEMS_AT_ONCE);
     let r = Arc::new(Mutex::new(r));
     let client = dagger_sdk::connect().await?;
     let config_file = client
@@ -98,7 +97,6 @@ async fn run_renovate(repos: Repos) -> eyre::Result<()> {
                                 .exit_code()
                                 .await
                                 .unwrap();
-                            sleep(Duration::from_secs(2)).await;
                         }
                         None => {
                             tracing::info!("executor is done, closing done renovate shard");
